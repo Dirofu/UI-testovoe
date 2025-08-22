@@ -1,4 +1,3 @@
-using R3;
 using TMPro;
 using UnityEngine;
 
@@ -8,21 +7,11 @@ namespace UI.HUD.View
 	{
 		[SerializeField] private TMP_Text _text;
 
-		private string _format;
+		private const string _format = "<sprite={0} color={1}>{2}";
 
-		public void SubscribeToModel(Observable<int> countObserver, string format)
+		public void UpdateViewDisplay(int spriteIndex, string colorHEX, int count)
 		{
-			_format = format;
-
-			countObserver.Subscribe(count =>
-			{
-				UpdateCreditDisplay(count);
-			});
-		}
-
-		public void UpdateCreditDisplay(int count)
-		{
-			_text.text = string.Format(_format, $"{count:N0}");
+			_text.text = string.Format(_format, spriteIndex, colorHEX, $"{count:N0}");
 		}
 	}
 }

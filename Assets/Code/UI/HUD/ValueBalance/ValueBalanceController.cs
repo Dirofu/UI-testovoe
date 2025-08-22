@@ -1,7 +1,9 @@
+using R3;
 using System;
-using UI.HUD.Model;
-using UI.HUD.View;
 using UnityEngine;
+using UI.HUD.View;
+using UI.HUD.Model;
+using Core.Scripts.Extensions;
 
 namespace UI.HUD.Controller
 {
@@ -16,28 +18,29 @@ namespace UI.HUD.Controller
 		private void Awake()
 		{
 			_view = GetComponent<ValueBalanceView>();
-			_model = new ValueBalanceModel(GetCurrencyByType(_moneyType));
+			_model = new ValueBalanceModel(GetCurrencyByType(_moneyType), _moneyType);
 
-			_view.SubscribeToModel(_model.ValueCount, GetFormatByType(_moneyType));
+			SubscribeToModel(_model.ValueCount);
 		}
 
 		private void OnEnable()
 		{
-			GameModel.ModelChanged += UpdateCoins;
+			GameModel.ModelChanged += UpdateValue;
+			UpdateValue();
 		}
 
 		private void OnDisable()
 		{
-			GameModel.ModelChanged -= UpdateCoins;
+			GameModel.ModelChanged -= UpdateValue;
 		}
 
-		private string GetFormatByType(MoneyType type) => type switch
+		private void SubscribeToModel(Observable<int> countObserver)
 		{
-			MoneyType.Coin => "<sprite name=\"Coin_0\" color=#C0A437>{0}",
-			MoneyType.Credits => "<sprite name=\"Credit_0\" color=#7AC6C8>{0}",
-
-			_ => throw new NotImplementedException(nameof(type))
-		};
+			countObserver.Subscribe(count =>
+			{
+				_view.UpdateViewDisplay(_model.Config.AssetIndex, _model.Config.Background.ToHtmlString(), count);
+			});
+		}
 
 		private int GetCurrencyByType(MoneyType type) => type switch
 		{
@@ -47,7 +50,7 @@ namespace UI.HUD.Controller
 			_ => throw new NotImplementedException(nameof(type))
 		};
 
-		public void UpdateCoins()
+		public void UpdateValue()
 		{
 			_model.UpdateValue(GetCurrencyByType(_moneyType));
 		}
