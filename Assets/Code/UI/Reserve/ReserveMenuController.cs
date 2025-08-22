@@ -1,38 +1,39 @@
+using UI.MenuOpener;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ReserveMenuController : MonoBehaviour
+namespace UI.Reserve
 {
-	[SerializeField] private Button _buyMedicine;
-	[SerializeField] private Button _buyArmorPlate;
-	[SerializeField] private Button _closeWindow;
-
-	private void OnEnable()
+	public class ReserveMenuController : MonoBehaviour, IOpenableMenu
 	{
-		_buyMedicine.onClick.AddListener(OnBuyMedicine);
-		_buyArmorPlate.onClick.AddListener(OnBuyArmorPlate);
-		_closeWindow.onClick.AddListener(OnWindowClose);
-	}
+		[SerializeField] private Button _closeWindow;
+		[SerializeField] private MenuType _menuType;
 
-	private void OnDisable()
-	{
-		_buyMedicine.onClick.RemoveListener(OnBuyMedicine);
-		_buyArmorPlate.onClick.RemoveListener(OnBuyArmorPlate);
-		_closeWindow.onClick.RemoveListener(OnWindowClose);
-	}
+		public MenuType Type => _menuType;
 
-	private void OnBuyMedicine()
-	{
-		GameModel.BuyConsumableForGold(GameModel.ConsumableTypes.Medpack);
-	}
+		private void OnEnable()
+		{
+			_closeWindow.onClick.AddListener(OnWindowClose);
+		}
 
-	private void OnBuyArmorPlate()
-	{
-		GameModel.BuyConsumableForSilver(GameModel.ConsumableTypes.ArmorPlate);
-	}
+		private void OnDisable()
+		{
+			_closeWindow.onClick.RemoveListener(OnWindowClose);
+		}
 
-	private void OnWindowClose()
-	{
-		gameObject.SetActive(false);
+		private void OnWindowClose()
+		{
+			MenuOpenerController.Instance.CloseMenu(_menuType);
+		}
+
+		public void OpenMenu()
+		{
+			gameObject.SetActive(true);
+		}
+
+		public void CloseMenu()
+		{
+			gameObject.SetActive(false);
+		}
 	}
 }
