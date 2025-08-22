@@ -12,6 +12,8 @@ namespace UI.MenuOpener
         private Dictionary<MenuType, IOpenableMenu> _menuByType = new();
         private Stack<IOpenableMenu> _openedMenus = new();
 
+        private const int _startLayer = 10;
+
 		protected override void Awake()
 		{
 			base.Awake();
@@ -26,6 +28,7 @@ namespace UI.MenuOpener
             if (_menuByType.TryGetValue(menuType, out IOpenableMenu menu) == false || _openedMenus.Contains(menu) == true)
                 return;
 
+			menu.Canvas.sortingOrder = _openedMenus.Count == 0 ? _startLayer : _openedMenus.Peek().Canvas.sortingOrder + 1;
             menu.OpenMenu();
 
             if (addToStack == true)
