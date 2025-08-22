@@ -47,7 +47,7 @@ namespace UI.HUD.Controller
 
 		private void OnButtonClick()
 		{
-			MenuOpenerController.Instance.OpenMenu(MenuType.Reserve, true);
+			MenuOpenerController.Instance.OpenMenu(MenuType.Reserve);
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace UI.MenuOpener
                 _menuByType.Add(menu.Type, menu);
 		}
 
-		public void OpenMenu(MenuType menuType, bool addToStack = false)
+		public void OpenMenu(MenuType menuType, bool addToStack = true)
         {
             if (_menuByType.TryGetValue(menuType, out IOpenableMenu menu) == false || _openedMenus.Contains(menu) == true)
                 return;
