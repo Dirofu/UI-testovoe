@@ -16,18 +16,18 @@ namespace UI.Base
 		public Canvas Canvas => _canvas;
 		public MenuType Type => _menuType;
 
-		private void Awake()
+		protected virtual void Awake()
 		{
 			_canvas = GetComponent<Canvas>();
 		}
 
-		private void OnEnable()
+		protected virtual void OnEnable()
 		{
 			if (_closeWindow != null)
 				_closeWindow.onClick.AddListener(OnWindowClose);
 		}
 
-		private void OnDisable()
+		protected virtual void OnDisable()
 		{
 			if (_closeWindow != null)
 				_closeWindow.onClick.RemoveListener(OnWindowClose);
