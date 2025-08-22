@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3015a4dc7ebebc94593e4fb0785d1d5b, type: 3}
+  m_Name: CoinBuyButton
+  m_EditorClassIdentifier: 
+  id: 0
+  _moneyType: 0
+  _backgroundColor: {r: 0.81960785, g: 0.74509805, b: 0.24313726, a: 1}
+  _asset: {fileID: 11400000, guid: 2c686fe950d382d46861b39452f0e247, type: 2}
+  _assetIndex: 1
