@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UI.Reserve.View;
 using UI.Reserve.Model;
+using System.Threading.Tasks;
 
 namespace UI.Reserve.Controller
 {
@@ -19,21 +20,29 @@ namespace UI.Reserve.Controller
 		{
 			_view = GetComponent<ReserveItemView>();
 			_model = new(GameModel.GetConsumableCount(_type), _type);
+			GameModel.OperationComplete += OnOperationComplete;
 		}
 
-		private void OnEnable()
+		private async void OnEnable()
 		{
 			GameModel.ModelChanged += UpdateInfo;
-			GameModel.OperationComplete += OnOperationComplete;
 			_view.BuyButtonViewClicked += BuyItem;
+
 			UpdateInfo();
+
+			await UpdateButtonAfterEnableMenu();
 		}
 
 		private void OnDisable()
 		{
-			GameModel.OperationComplete -= OnOperationComplete;
 			GameModel.ModelChanged -= UpdateInfo;
 			_view.BuyButtonViewClicked -= BuyItem;
+		}
+
+		private async Task UpdateButtonAfterEnableMenu()
+		{
+			await Task.Delay(10);
+			_view.ChangeBuyButtonState(_buyBlockGuid == null);
 		}
 
 		private void UpdateInfo()
@@ -47,17 +56,12 @@ namespace UI.Reserve.Controller
 			if (_buyBlockGuid.HasValue == true)
 				return;
 
-			switch (_model.MoneyType)
+			_buyBlockGuid = _model.MoneyType switch
 			{
-				case MoneyType.Coin:
-					_buyBlockGuid = GameModel.BuyConsumableForGold(_type);
-					break;
-				case MoneyType.Credits:
-					_buyBlockGuid = GameModel.BuyConsumableForSilver(_type);
-					break;
-				default:
-					throw new NotImplementedException($"{nameof(_model.MoneyType)} is {_model.MoneyType} not implemented");
-			}
+				MoneyType.Coin => (Guid?)GameModel.BuyConsumableForGold(_type),
+				MoneyType.Credits => (Guid?)GameModel.BuyConsumableForSilver(_type),
+				_ => throw new NotImplementedException($"{nameof(_model.MoneyType)} is {_model.MoneyType} not implemented"),
+			};
 
 			_view.ChangeBuyButtonState(false);
 		}
