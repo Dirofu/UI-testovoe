@@ -1,4 +1,5 @@
 Тестовое задание на позицию UI программиста.
+Проект выполнен на версии Unity 6000.0.36f1
 
 Задача:
 В рамках тестового задания требуется сделать маленький юнити-проект. 
@@ -12,6 +13,7 @@
 ----------------------------------------------------
 
 A test assignment for the position of UI programmer.
+The project is based on Unity version 6000.0.36f1
 
 Task:
 As part of the test task, you need to create a small unity project. 
